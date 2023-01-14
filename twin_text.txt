@@ -1,0 +1,10 @@
+A = True
+B = True
+C = True
+D = True
+height = 800
+width = 1280
+tempo = 5e-05
+E = True
+FinalPepeColors = ["#F5E2AA", "#F2C546", "#DC7648", "#E9B8CE", "#83C1CE", "#5A72EC", "#3164A6", "#D65267", "#0C0103","#0A2463","#4200DC","#690AAE","#D8315B","#F74A84","#A9FDAC","#32A287"]
+
