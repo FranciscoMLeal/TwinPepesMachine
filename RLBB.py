@@ -17,11 +17,13 @@ def get_canvas_dimensions():
             altTela = int(line.split("=")[1])
         if "width" in line:
             largTela = int(line.split("=")[1])
+        if "canvas_dividend" in line:
+            canvas_dividend = int(line.split("=")[1])
     #Programar aqui self.DivLarg
-    divLarg = int((largTela/20)/2)    #int(input("Numero de lados:"))
+    divLarg = int((largTela/canvas_dividend)/2)    #int(input("Numero de lados:"))
     if divLarg <= 5:
         divLarg = 6
-    divAlt = int((altTela/20)/2) 
+    divAlt = int((altTela/canvas_dividend)/2) 
     screen = pygame.display.set_mode((largTela, altTela))
     return altTela,largTela,divAlt,divLarg,screen
     
@@ -71,8 +73,8 @@ PatColorHolder = []
 CorFundoHolder = ["#000000","#000000"]
 CorPatternHolder = ["#000000","#000000"]
 ShapeComandHolder = ["tt"]
-ShapeComandList = ["gr","pq","l","lp","dl","s","cp","t","tp","tgp","zz","vlp","hlp","45","lil","pepes"]
-ShapeComandSquaresList = ["c","st","gr","pq","cic","l","lp","dl","s","cp","t","tp","tgp","zz","vlp","hlp","45","lil","sqi","pepes"] ## "c","cic,"st","sqi" PATTERNS MISSING HERE
+ShapeComandList = ["gr","pq","l","lp","dl","s","cp","t","tp","tgp","zz","vlp","hlp","45","lil"]#,"pepes"]
+#ShapeComandSquaresList = ["c","st","gr","pq","cic","l","lp","dl","s","cp","t","tp","tgp","zz","vlp","hlp","45","lil","sqi","pepes"] ## "c","cic,"st","sqi" PATTERNS MISSING HERE
 Ypoints = []
 points = []
 
@@ -133,13 +135,13 @@ class PepeAI:
 
         #print("FUNDO COLOR HOLDER =", CorFundoHolder[-1],"NEW FUNDO COLOR =",self.colorFundo,"OLD PATTERN COLOR =",CorPatternHolder[-1],"NEW PATTERN COLOR",self.colorPattern )
 
-        while self.colorPattern == self.colorFundo or self.colorPattern == CorPatternHolder[-1] or self.colorFundo == CorFundoHolder[-1] or self.colorFundo == CorPatternHolder[-1] or self.colorPattern == CorFundoHolder[-1]:
+        while self.colorPattern == self.colorFundo: # or self.colorPattern == CorPatternHolder[-1]:# or self.colorFundo == CorFundoHolder[-1] or self.colorFundo == CorPatternHolder[-1] or self.colorPattern == CorFundoHolder[-1]:
             self.colorPattern = random.choice(self.pepeCores)
             self.colorFundo = random.choice(self.pepeCores)
-            #print("REPEAT MODE ACTIVATED : FUNDO COLOR HOLDER =", CorFundoHolder[-1],"NEW FUNDO COLOR =",self.colorFundo,"OLD PATTERN COLOR =",CorPatternHolder[-1],"NEW PATTERN COLOR",self.colorPattern )
-                
-        CorFundoHolder.append(self.colorFundo)
-        CorPatternHolder.append(self.colorPattern)
+        #    #print("REPEAT MODE ACTIVATED : FUNDO COLOR HOLDER =", CorFundoHolder[-1],"NEW FUNDO COLOR =",self.colorFundo,"OLD PATTERN COLOR =",CorPatternHolder[-1],"NEW PATTERN COLOR",self.colorPattern )
+        #        
+        #CorFundoHolder.append(self.colorFundo)
+        #CorPatternHolder.append(self.colorPattern)
             
     def GetPatternShape(self):
         
@@ -203,10 +205,10 @@ class PepeDrawer:
             patrao.MakesCirclesOnFillete()      
             #pygame.display.flip()
             ShapeComandHolder.append(self.ShapeComand)
-        elif self.ShapeComand == "pepes":
-            patrao.pepesAiSignature(FinalPepeColors)    
-            #pygame.display.flip()
-            ShapeComandHolder.append(self.ShapeComand)
+        #elif self.ShapeComand == "pepes":
+        #    patrao.pepesAiSignature(FinalPepeColors)    
+        #    #pygame.display.flip()
+        #    ShapeComandHolder.append(self.ShapeComand)
         elif self.ShapeComand == "cic":
             patrao.MakesCirclesinCirclesOnFillete()    
             #pygame.display.flip()
@@ -315,6 +317,30 @@ class StartPepeFunction:
                 if y + NewNum > self.divAlt:   ### condition for not going out of the canvas in y direction
                     NewNum = self.divAlt - y
                 NewPepe = PepeAI()
+                
+                #CHECK FOR SAME COLORS AND PATTERNS :
+                #Make this a def that runs everywhere ::: might need a var to know how manny steps to see in ADN
+                ###############
+                tester_i = 0
+                ll = len(ADN)
+                touched_colors = []
+                while tester_i < ll:
+                    cor_cobaia, cor2_cobaia, (x1,y1), (x2, y2), pattern_cobaia = ADN[tester_i]
+                    if (x2 == self.Xpoints[a-1] and (y1 <= y < y2 or y1 < y+NewNum <= y2)) or tester_i == ll - 1:# and (cor_cobaia == NewPepe.colorFundo or cor_cobaia == NewPepe.colorPattern or cor2_cobaia == NewPepe.colorFundo or cor2_cobaia == NewPepe.colorPattern)) or (tester_i == ll - 1 and (cor_cobaia == NewPepe.colorFundo or cor_cobaia == NewPepe.colorPattern or cor2_cobaia == NewPepe.colorFundo or cor2_cobaia == NewPepe.colorPattern)):
+                        touched_colors.append((cor_cobaia,cor2_cobaia,pattern_cobaia))
+                        #touched_colors.append(cor2_cobaia)
+                    tester_i = tester_i + 1
+                nbr_touched_colors = len(touched_colors)
+                t = 0
+                while t < nbr_touched_colors:
+                    if NewPepe.colorFundo == touched_colors[t][0] or NewPepe.colorFundo == touched_colors[t][1] or NewPepe.colorPattern == touched_colors[t][0] or NewPepe.colorPattern == touched_colors[t][1] or NewPepe.ShapeComand == touched_colors[t][2]:
+                        print(f"RECOLORING:::: {NewPepe.ShapeComand} = {pattern_cobaia}")
+                        NewPepe = PepeAI()   
+                        t = 0
+                    else:
+                        t = t + 1
+                ###############
+                
                 newPepitos = PepeDrawer(NewPepe.colorFundo,NewPepe.colorPattern,(self.Xpoints[a-1],y),(self.Xpoints[a],y+NewNum),NewPepe.ShapeComand)
                 newPepitos.startbyFilette()
                 ADN.append((NewPepe.colorFundo,NewPepe.colorPattern,(self.Xpoints[a-1],y),(self.Xpoints[a],y+NewNum),newPepitos.ShapeComand))
@@ -663,3 +689,21 @@ class ADNprocessor:
 #       - ARRANJAR UM DISPLAY INTERACTIVO
 #       - COLOR PICKER
 
+
+
+
+# ###############
+#                 #CHECK FOR SAME COLORS IN LINES
+#                 tester_i = 0
+#                 ll = len(ADN)
+#                 while tester_i < ll:
+#                     cor_cobaia, cor2_cobaia, (x1,y1), (x2, y2), pattern_cobaia = ADN[tester_i]
+#                     if (x2 == self.Xpoints[a-1] and (y1 <= y < y2 or y1 < y+NewNum <= y2) and (cor_cobaia == NewPepe.colorFundo or cor_cobaia == NewPepe.colorPattern or cor2_cobaia == NewPepe.colorFundo or cor2_cobaia == NewPepe.colorPattern)) or (tester_i == ll - 1 and (cor_cobaia == NewPepe.colorFundo or cor_cobaia == NewPepe.colorPattern or cor2_cobaia == NewPepe.colorFundo or cor2_cobaia == NewPepe.colorPattern)):
+#                         while cor_cobaia == NewPepe.colorFundo or cor_cobaia == NewPepe.colorPattern or cor2_cobaia == NewPepe.colorFundo or cor2_cobaia == NewPepe.colorPattern:
+#                             print(f"RecoloringOG {(self.Xpoints[a-1],y),(self.Xpoints[a],y+NewNum)} : {NewPepe.colorFundo}, {NewPepe.colorPattern}------- {(x1,y1),(x2,y2)} {cor_cobaia,cor2_cobaia} ")
+#                             NewPepe = PepeAI()
+#                             print(f"RecoloringOG {(self.Xpoints[a-1],y),(self.Xpoints[a],y+NewNum)} : {NewPepe.colorFundo}, {NewPepe.colorPattern}------- {(x1,y1),(x2,y2)} {cor_cobaia,cor2_cobaia} ")
+#                         print(f"FINAL_OGOG {(self.Xpoints[a-1],y),(self.Xpoints[a],y+NewNum)} : {NewPepe.colorFundo}, {NewPepe.colorPattern}------- {(x1,y1),(x2,y2)} {cor_cobaia,cor2_cobaia} ")
+#                     tester_i = tester_i + 1
+                    
+#                 ###############

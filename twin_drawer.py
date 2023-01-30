@@ -29,7 +29,6 @@ while True:
         if value == "True":
             true_vars.append(var)
         if value == "True" and var == "A" and temporale == 4:
-            PepesMachina.set_new_colors(5)
             PepesMachina.StartPepeFunction()
         if value == "True" and var == "B" and (temporale == 2 or temporale == 0):
             print("FIX THIS")
@@ -45,10 +44,12 @@ while True:
                 y = random.randrange(0,height)
                 PepesMachina.ClicktoChangePP(x,y)
                 i = i + 1
+        if value == "True" and var == "E" and temporale == 5:
+            PepesMachina.set_new_colors(8)
         if var == "tempo":
             tempo = float(value)
     temporale = temporale + 1
-    if temporale >= 5:
+    if temporale >= 6:
         temporale = 0
     print(f"Active Buttons = {', '.join(true_vars)}")
     time.sleep(tempo)

@@ -43,6 +43,10 @@ def update_tempo():
     tempo = float(tempo_var.get())
     change_var("tempo", tempo)
 
+def update_dividend():
+    dividend = int(dividend_var.get())
+    change_var("canvas_dividend", dividend)
+
 root = tk.Tk()
 
 button_frame = tk.Frame(root)
@@ -80,6 +84,13 @@ tempo_entry.insert(0,1)
 tempo_entry.grid(row=4, column=0)
 tempo_button = tk.Button(root, text="Update Tempo", command=update_tempo)
 tempo_button.grid(row=4, column=1)
+
+dividend_var = tk.StringVar()
+dividend_entry = tk.Entry(root, textvariable=dividend_var)
+dividend_entry.insert(0,25)
+dividend_entry.grid(row=5, column=0)
+dividend_button = tk.Button(root, text="Update Dividend", command=update_dividend)
+dividend_button.grid(row=5, column=1)
 
 button_E = tk.Button(button_frame, text="E", command=lambda: button_click("E"))
 button_E.grid(row=0, column=0)
