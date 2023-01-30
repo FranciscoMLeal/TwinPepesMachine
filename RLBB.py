@@ -287,6 +287,28 @@ class PepeDrawer:
     
 
 
+def check_for_touching_colors(self,ADN,NewPepe,a,y,NewNum):
+    print("Checking for color in here !!!!")
+    tester_i = 0
+    ll = len(ADN)
+    touched_colors = []
+    while tester_i < ll:
+        cor_cobaia, cor2_cobaia, (x1,y1), (x2, y2), pattern_cobaia = ADN[tester_i]
+        if (x2 == self.Xpoints[a-1] and (y1 <= y < y2 or y1 < y+NewNum <= y2)) or tester_i == ll - 1:# and (cor_cobaia == NewPepe.colorFundo or cor_cobaia == NewPepe.colorPattern or cor2_cobaia == NewPepe.colorFundo or cor2_cobaia == NewPepe.colorPattern)) or (tester_i == ll - 1 and (cor_cobaia == NewPepe.colorFundo or cor_cobaia == NewPepe.colorPattern or cor2_cobaia == NewPepe.colorFundo or cor2_cobaia == NewPepe.colorPattern)):
+            touched_colors.append((cor_cobaia,cor2_cobaia,pattern_cobaia))
+            #touched_colors.append(cor2_cobaia)
+        tester_i = tester_i + 1
+    nbr_touched_colors = len(touched_colors)
+    t = 0
+    while t < nbr_touched_colors:
+        if NewPepe.colorFundo == touched_colors[t][0] or NewPepe.colorFundo == touched_colors[t][1] or NewPepe.colorPattern == touched_colors[t][0] or NewPepe.colorPattern == touched_colors[t][1] or NewPepe.ShapeComand == touched_colors[t][2]:
+            print(f"RECOLORING:::: {NewPepe.ShapeComand} = {pattern_cobaia}")
+            NewPepe = PepeAI()   
+            t = 0
+        else:
+            t = t + 1
+    return(NewPepe)
+
 class StartPepeFunction:
     def __init__(self):
         self.Xpoints = [] 
@@ -317,30 +339,7 @@ class StartPepeFunction:
                 if y + NewNum > self.divAlt:   ### condition for not going out of the canvas in y direction
                     NewNum = self.divAlt - y
                 NewPepe = PepeAI()
-                
-                #CHECK FOR SAME COLORS AND PATTERNS :
-                #Make this a def that runs everywhere ::: might need a var to know how manny steps to see in ADN
-                ###############
-                tester_i = 0
-                ll = len(ADN)
-                touched_colors = []
-                while tester_i < ll:
-                    cor_cobaia, cor2_cobaia, (x1,y1), (x2, y2), pattern_cobaia = ADN[tester_i]
-                    if (x2 == self.Xpoints[a-1] and (y1 <= y < y2 or y1 < y+NewNum <= y2)) or tester_i == ll - 1:# and (cor_cobaia == NewPepe.colorFundo or cor_cobaia == NewPepe.colorPattern or cor2_cobaia == NewPepe.colorFundo or cor2_cobaia == NewPepe.colorPattern)) or (tester_i == ll - 1 and (cor_cobaia == NewPepe.colorFundo or cor_cobaia == NewPepe.colorPattern or cor2_cobaia == NewPepe.colorFundo or cor2_cobaia == NewPepe.colorPattern)):
-                        touched_colors.append((cor_cobaia,cor2_cobaia,pattern_cobaia))
-                        #touched_colors.append(cor2_cobaia)
-                    tester_i = tester_i + 1
-                nbr_touched_colors = len(touched_colors)
-                t = 0
-                while t < nbr_touched_colors:
-                    if NewPepe.colorFundo == touched_colors[t][0] or NewPepe.colorFundo == touched_colors[t][1] or NewPepe.colorPattern == touched_colors[t][0] or NewPepe.colorPattern == touched_colors[t][1] or NewPepe.ShapeComand == touched_colors[t][2]:
-                        print(f"RECOLORING:::: {NewPepe.ShapeComand} = {pattern_cobaia}")
-                        NewPepe = PepeAI()   
-                        t = 0
-                    else:
-                        t = t + 1
-                ###############
-                
+                NewPepe = check_for_touching_colors(self,ADN,NewPepe,a,y,NewNum)
                 newPepitos = PepeDrawer(NewPepe.colorFundo,NewPepe.colorPattern,(self.Xpoints[a-1],y),(self.Xpoints[a],y+NewNum),NewPepe.ShapeComand)
                 newPepitos.startbyFilette()
                 ADN.append((NewPepe.colorFundo,NewPepe.colorPattern,(self.Xpoints[a-1],y),(self.Xpoints[a],y+NewNum),newPepitos.ShapeComand))
@@ -395,6 +394,31 @@ class ClicktoChangePP:
 
 
 
+
+
+
+def check_for_touching_colors_in_recolor(nX,ADN,NewPepe,nY,sY,x):
+    print("AHAHHAHAHHAHAHAHAHAHAHHAHAHAHAHAHAHAHAHHAHAHA !!!!")
+    tester_i = 0
+    ll = len(ADN)
+    touched_colors = []
+    while tester_i < ll:
+        cor_cobaia, cor2_cobaia, (x1,y1), (x2, y2), pattern_cobaia = ADN[tester_i]
+        if (x2 == nX and (y1 <= nY < y2 or y1 < sY <= y2)) or tester_i == x - 1:# and (cor_cobaia == NewPepe.colorFundo or cor_cobaia == NewPepe.colorPattern or cor2_cobaia == NewPepe.colorFundo or cor2_cobaia == NewPepe.colorPattern)) or (tester_i == ll - 1 and (cor_cobaia == NewPepe.colorFundo or cor_cobaia == NewPepe.colorPattern or cor2_cobaia == NewPepe.colorFundo or cor2_cobaia == NewPepe.colorPattern)):
+            touched_colors.append((cor_cobaia,cor2_cobaia,pattern_cobaia))
+            print(f"I Appended : {touched_colors}")
+            #touched_colors.append(cor2_cobaia)
+        tester_i = tester_i + 1
+    nbr_touched_colors = len(touched_colors)
+    t = 0
+    while t < nbr_touched_colors:
+        if NewPepe.colorFundo == touched_colors[t][0] or NewPepe.colorFundo == touched_colors[t][1] or NewPepe.colorPattern == touched_colors[t][0] or NewPepe.colorPattern == touched_colors[t][1] or NewPepe.ShapeComand == touched_colors[t][2]:
+            print(f"RECOLORING:::: {NewPepe.ShapeComand} = {pattern_cobaia}")
+            NewPepe = PepeAI()   
+            t = 0
+        else:
+            t = t + 1
+    return(NewPepe)
     
 
 class ADNprocessor:
@@ -427,7 +451,9 @@ class ADNprocessor:
         while x < len(ADN):
             NewPepe = PepeAI()
             newCorF,newCorP,(nX,nY),(sX,sY),newShapC = ADN[x]
+            NewPepe = check_for_touching_colors_in_recolor(nX,ADN,NewPepe,nY,sY,x)
             newPepitos = PepeDrawer(NewPepe.colorFundo,NewPepe.colorPattern,(nX,nY),(sX,sY),newShapC)
+            ADN[x] = (NewPepe.colorFundo,NewPepe.colorPattern,(nX,nY),(sX,sY),newShapC)
             newPepitos.startbyFilette()
             x += 1
 
