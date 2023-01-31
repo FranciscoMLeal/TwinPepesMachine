@@ -89,7 +89,7 @@ ADN = []
 patternEssencials = [divLarg,divAlt,largTela,altTela,screen]
 
 
-FinalPepeColors = get_final_pepecolors(8)
+FinalPepeColors = get_final_pepecolors(10)
 
 def set_new_colors(number_of_colors = 8):
     global FinalPepeColors
@@ -284,8 +284,12 @@ class PepeDrawer:
         else:
             print("You did nothing BITCH")
 
-    
-
+    #(y1 <= nY < y2 or y1 < sY <= y2 or nY <= y1 < sY)
+def forgivemePepes():
+    forgive = 0
+    while forgive < 20:
+        print("LORD FORGIVE ME BUT I'M NOT A PEPE")
+        forgive = forgive + 1
 
 def check_for_touching_colors(self,ADN,NewPepe,a,y,NewNum):
     print("Checking for color in here !!!!")
@@ -294,16 +298,21 @@ def check_for_touching_colors(self,ADN,NewPepe,a,y,NewNum):
     touched_colors = []
     while tester_i < ll:
         cor_cobaia, cor2_cobaia, (x1,y1), (x2, y2), pattern_cobaia = ADN[tester_i]
-        if (x2 == self.Xpoints[a-1] and (y1 <= y < y2 or y1 < y+NewNum <= y2)) or tester_i == ll - 1:# and (cor_cobaia == NewPepe.colorFundo or cor_cobaia == NewPepe.colorPattern or cor2_cobaia == NewPepe.colorFundo or cor2_cobaia == NewPepe.colorPattern)) or (tester_i == ll - 1 and (cor_cobaia == NewPepe.colorFundo or cor_cobaia == NewPepe.colorPattern or cor2_cobaia == NewPepe.colorFundo or cor2_cobaia == NewPepe.colorPattern)):
+        if (x2 == self.Xpoints[a-1] and (y1 <= y < y2 or y1 < y+NewNum <= y2 or y < y1 < y+NewNum)) or tester_i == ll - 1:# and (cor_cobaia == NewPepe.colorFundo or cor_cobaia == NewPepe.colorPattern or cor2_cobaia == NewPepe.colorFundo or cor2_cobaia == NewPepe.colorPattern)) or (tester_i == ll - 1 and (cor_cobaia == NewPepe.colorFundo or cor_cobaia == NewPepe.colorPattern or cor2_cobaia == NewPepe.colorFundo or cor2_cobaia == NewPepe.colorPattern)):
             touched_colors.append((cor_cobaia,cor2_cobaia,pattern_cobaia))
             #touched_colors.append(cor2_cobaia)
         tester_i = tester_i + 1
     nbr_touched_colors = len(touched_colors)
     t = 0
+    cancel_operation = 0
     while t < nbr_touched_colors:
         if NewPepe.colorFundo == touched_colors[t][0] or NewPepe.colorFundo == touched_colors[t][1] or NewPepe.colorPattern == touched_colors[t][0] or NewPepe.colorPattern == touched_colors[t][1] or NewPepe.ShapeComand == touched_colors[t][2]:
-            print(f"RECOLORING:::: {NewPepe.ShapeComand} = {pattern_cobaia}")
+            if cancel_operation > 500:
+                forgivemePepes()
+                break
+            print(f"RECOLORING:::: {NewPepe.ShapeComand} = {pattern_cobaia} for {cancel_operation} nmbr of times")
             NewPepe = PepeAI()   
+            cancel_operation = cancel_operation + 1
             t = 0
         else:
             t = t + 1
@@ -347,6 +356,8 @@ class StartPepeFunction:
                 ###
                 y = y + NewNum
             print(self.Xpoints,self.Ypoints)
+    def get_screen(self):
+        return self.screen
             
 
 class ClicktoChangePP:
@@ -404,18 +415,23 @@ def check_for_touching_colors_in_recolor(nX,ADN,NewPepe,nY,sY,x):
     touched_colors = []
     while tester_i < ll:
         cor_cobaia, cor2_cobaia, (x1,y1), (x2, y2), pattern_cobaia = ADN[tester_i]
-        if (x2 == nX and (y1 <= nY < y2 or y1 < sY <= y2)) or tester_i == x - 1:# and (cor_cobaia == NewPepe.colorFundo or cor_cobaia == NewPepe.colorPattern or cor2_cobaia == NewPepe.colorFundo or cor2_cobaia == NewPepe.colorPattern)) or (tester_i == ll - 1 and (cor_cobaia == NewPepe.colorFundo or cor_cobaia == NewPepe.colorPattern or cor2_cobaia == NewPepe.colorFundo or cor2_cobaia == NewPepe.colorPattern)):
+        if (x2 == nX and (y1 <= nY < y2 or y1 < sY <= y2 or nY <= y1 < sY )) or tester_i == x - 1: #meter aqui mais uma condição
             touched_colors.append((cor_cobaia,cor2_cobaia,pattern_cobaia))
             print(f"I Appended : {touched_colors}")
             #touched_colors.append(cor2_cobaia)
         tester_i = tester_i + 1
     nbr_touched_colors = len(touched_colors)
+    cancel_operation = 0
     t = 0
     while t < nbr_touched_colors:
         if NewPepe.colorFundo == touched_colors[t][0] or NewPepe.colorFundo == touched_colors[t][1] or NewPepe.colorPattern == touched_colors[t][0] or NewPepe.colorPattern == touched_colors[t][1] or NewPepe.ShapeComand == touched_colors[t][2]:
-            print(f"RECOLORING:::: {NewPepe.ShapeComand} = {pattern_cobaia}")
+            if cancel_operation > 500:
+                forgivemePepes()
+                break
+            print(f"RECOLORING:::: {NewPepe.ShapeComand} = {pattern_cobaia} for {cancel_operation} nbr of times")
             NewPepe = PepeAI()   
             t = 0
+            cancel_operation = cancel_operation + 1
         else:
             t = t + 1
     return(NewPepe)
@@ -437,7 +453,6 @@ class ADNprocessor:
 
 
     def colorChangeReverse():
-        
         x = len(ADN) - 1
         while x >= 0:
             NewPepe = PepeAI()
@@ -501,235 +516,3 @@ class ADNprocessor:
           #stripped_line = line.strip()
           print(x)
         CanvasRegistry.close()
-    
-
-
-
-
-            
-
-
-
-
-   
-   
-            
-### KEYBOARD INTERACTION COMMANDS FOR FRONTRUNNING THE MACHINE ::::        
-
-        
-#grid = GridGenerator()
-#running = True
-#while running:
-#  for event in pygame.event.get():
-#    if event.type == pygame.QUIT:
-#      print(steps,"steps")
-#      running = False
-#      
-#
-#
-#    elif event.type == pygame.KEYDOWN and event.key == pygame.K_TAB:
-#        ADN = []
-#        grid.draw()
-#        canIgoback = True
-#        if gofoward == False:
-#            if isdrawn >= 0 and isdrawn < 4:
-#                isdrawn += 1
-#            else :
-#                isdrawn == 0 
-#        gofoward = True
-#        
-#        if isdrawn == 0:
-#            new0 = StartPepeFunction()
-#            new00 = ADN
-#            del new0
-#            
-#            print("you print in :")
-#            print(isdrawn)
-#            
-#            isdrawn = 1
-#            
-#            print("you leave in :")
-#            print(isdrawn)
-#
-#      
-#
-#    elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-#        x,y = pygame.mouse.get_pos()    
-#        newPepePattern = ClicktoChangePP(x,y)
-#    
-#    elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
-#        choosePat = True
-#        x,y = pygame.mouse.get_pos()    
-#        newPepePattern = ClicktoChangePP(x,y)
-#        choosePat = False
-#
-#    # Rewind button in R
-#    # NOT WORKING YET    
-#    elif event.type == pygame.KEYDOWN and event.key == pygame.K_r:
-#        choosePat = True
-#        if gofoward == True:
-#            #gofoward = False
-#            if isdrawn > 0 and isdrawn <= 4:
-#                isdrawn -= 1
-#            else :
-#                isdrawn == 4
-#        if canIgoback == True:
-#            if isdrawn == 0 and canIgobackintoFuture == True:
-#                ADN = []
-#                ADN = new44
-#                Call00 = ADNprocessor()
-#                Call00.rewindOnePepe(new44)
-#                del Call00
-#                
-#                print("you print in :")
-#                print(isdrawn)
-#                
-#                isdrawn = 4
-#
-#                print("you leave in :")
-#                print(isdrawn)
-#
-#            
-#        choosePat = False
-#
-#    # elif event.type == pygame.KEYDOWN and event.key == pygame.K_c:
-#
-#
-#
-#    # Changes IMAGE COLORS with the Adn Processor
-#
-#    elif event.type == pygame.KEYDOWN and event.key == pygame.K_a:
-#        choosePat = True
-#        adnProcess = ADNprocessor()
-#        adnProcess.colorChanger()
-#        choosePat = False
-#
-#    # Calls Saved Pepe
-#
-#    elif event.type == pygame.KEYDOWN and event.key == pygame.K_o:
-#        choosePat = True
-#        adnProcess = ADNprocessor()
-#        adnProcess.callSavedPepes()
-#        choosePat = False
-#
-#
-#    #Saves a Pepe as PNG and as Genome
-#    
-#    elif event.type == pygame.KEYDOWN and event.key == pygame.K_p:
-#
-#        babyPepeName = input("Write Your Baby Pepe Name:")
-#        #TimeStamp = str(datetime.now())[:19]
-#        #TimeStampuse = list(TimeStamp)
-#        #TimeStampuse[16] = "m"
-#        #TimeStampuse[13] = "h"
-#        #PrintTimeStamp = "".join(TimeStampuse)
-#        
-#                        ###### FIND A WAY TO DUMP ALLSAVED PEPES IN TERMINAL ????
-#        ## Escreve a Canvas Size de cada BabyPepe na sua pagina apropriada
-#        CanvasRegistry = open("babypepesCanvassize.py", "r")
-#
-#        new_file_content = ""
-#        for line in CanvasRegistry:
-#          stripped_line = line.strip()
-#          new_line = stripped_line.replace("}", " ")
-#          new_file_content += new_line +"\n"
-#        CanvasRegistry.close()
-#
-#        CanvasRegistry = open("babypepesCanvassize.py", "w")
-#        CanvasRegistry.write(new_file_content)
-#        canvaSize = (largTela,altTela,divLarg,divAlt)
-#        CanvasRegistry.write(",'")
-#        CanvasRegistry.write(babyPepeName)
-#        CanvasRegistry.write("'")
-#        CanvasRegistry.write(" : ")
-#        CanvasRegistry.write(str(canvaSize))
-#        CanvasRegistry.write("}")
-#        CanvasRegistry.close()
-#
-#
-#        ## Escreve o ADN de cada BabyPepe na sua pagina apropriada
-#        AdnRegistry = open("babypepes.py", "r")
-#
-#        new_file_content = ""
-#        for line in AdnRegistry:
-#          stripped_line = line.strip()
-#          new_line = stripped_line.replace("}", " ")
-#          new_file_content += new_line +"\n"
-#        AdnRegistry.close()
-#
-#        AdnRegistry = open("babypepes.py", "w")
-#        AdnRegistry.write(new_file_content)
-#
-#        AdnRegistry.write(",'")
-#        AdnRegistry.write(babyPepeName)
-#        AdnRegistry.write("'")
-#        AdnRegistry.write(" : ")
-#        AdnRegistry.write(str(ADN))
-#        AdnRegistry.write("}")
-#        AdnRegistry.close()
-#      
-#        SavedPepe = ADN
-#        realName = "BabyPepe (" + babyPepeName + ").png"
-#        pygame.image.save(screen , realName)
-#        print("You just created a jpg with your Pepe in your local directory named :", realName)
-#    
-#    
-#    # Spacebar to redraw squares
-#
-#    elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-#        grid.draw()
-#       
-#    # Press Arrows for controlling divisions number
-#
-#    elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-#        divLarg -= 1
-#        if divLarg <=5:
-#            divLarg = 6
-#        grid.draw()
-#    elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-#        divLarg += 1
-#        grid.draw()
-#    elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
-#        divAlt -= 1
-#        if divAlt <= 3:
-#            divAlt = 4
-#        grid.draw()
-#    elif event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
-#        divAlt += 1
-#        grid.draw()
-#
-#
-#
-#
-#
-#
-#
-#
-#
-########
-# CRIAR UM GUI
-#   - 1 BOTAO PARA INICIALIZAR PYGAME
-#   - 2 CAIXAS PARA INSERIR MEDIDAS DA PAREDE
-#   - 2 CONTADORES PARA NUMERO DE DIVLARG E DIVALT
-#   - 1 CONTADOR PARA NUMERO DE CORES
-#       - ARRANJAR UM DISPLAY INTERACTIVO
-#       - COLOR PICKER
-
-
-
-
-# ###############
-#                 #CHECK FOR SAME COLORS IN LINES
-#                 tester_i = 0
-#                 ll = len(ADN)
-#                 while tester_i < ll:
-#                     cor_cobaia, cor2_cobaia, (x1,y1), (x2, y2), pattern_cobaia = ADN[tester_i]
-#                     if (x2 == self.Xpoints[a-1] and (y1 <= y < y2 or y1 < y+NewNum <= y2) and (cor_cobaia == NewPepe.colorFundo or cor_cobaia == NewPepe.colorPattern or cor2_cobaia == NewPepe.colorFundo or cor2_cobaia == NewPepe.colorPattern)) or (tester_i == ll - 1 and (cor_cobaia == NewPepe.colorFundo or cor_cobaia == NewPepe.colorPattern or cor2_cobaia == NewPepe.colorFundo or cor2_cobaia == NewPepe.colorPattern)):
-#                         while cor_cobaia == NewPepe.colorFundo or cor_cobaia == NewPepe.colorPattern or cor2_cobaia == NewPepe.colorFundo or cor2_cobaia == NewPepe.colorPattern:
-#                             print(f"RecoloringOG {(self.Xpoints[a-1],y),(self.Xpoints[a],y+NewNum)} : {NewPepe.colorFundo}, {NewPepe.colorPattern}------- {(x1,y1),(x2,y2)} {cor_cobaia,cor2_cobaia} ")
-#                             NewPepe = PepeAI()
-#                             print(f"RecoloringOG {(self.Xpoints[a-1],y),(self.Xpoints[a],y+NewNum)} : {NewPepe.colorFundo}, {NewPepe.colorPattern}------- {(x1,y1),(x2,y2)} {cor_cobaia,cor2_cobaia} ")
-#                         print(f"FINAL_OGOG {(self.Xpoints[a-1],y),(self.Xpoints[a],y+NewNum)} : {NewPepe.colorFundo}, {NewPepe.colorPattern}------- {(x1,y1),(x2,y2)} {cor_cobaia,cor2_cobaia} ")
-#                     tester_i = tester_i + 1
-                    
-#                 ###############

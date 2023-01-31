@@ -1,12 +1,16 @@
 import time
 import RLBB as pepesmachine
 import random
+import pygame
 
 tempo = 1
 temporale = 0
+name_counter = 0  
 
 PepesMachina = pepesmachine
-PepesMachina.StartPepeFunction()
+StartPepes = PepesMachina.StartPepeFunction()
+screen = StartPepes.get_screen()
+
 
 def get_width_height():
     with open("twin_text.txt", "r") as f:
@@ -18,8 +22,8 @@ def get_width_height():
             width = int(line.split("=")[1])
     return width, height
 
-
-while True:
+running = True
+while running:
     PepesMachina = pepesmachine
     with open("twin_text.txt", "r") as f:
         lines = f.readlines()
@@ -45,7 +49,11 @@ while True:
                 PepesMachina.ClicktoChangePP(x,y)
                 i = i + 1
         if value == "True" and var == "E" and temporale == 5:
-            PepesMachina.set_new_colors(8)
+            nbr = lines[-3:-2]
+            var_name, var_nbr_of_colors = nbr[0].strip().split(" = ")
+            nbr_of_colors = int(var_nbr_of_colors)
+            print(f"HEREISYOURNBROFCOLORS = {nbr_of_colors}")
+            PepesMachina.set_new_colors(nbr_of_colors)
         if var == "tempo":
             tempo = float(value)
     temporale = temporale + 1
@@ -53,5 +61,14 @@ while True:
         temporale = 0
     print(f"Active Buttons = {', '.join(true_vars)}")
     time.sleep(tempo)
-
+    # Closes pygame  
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            print("CLOSING")
+            running = False
+            pygame.quit()
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            realName = f"BabyPepe{name_counter}.png"
+            name_counter = name_counter + 1
+            pygame.image.save(screen , realName)
 
